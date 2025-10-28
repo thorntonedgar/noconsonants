@@ -65,3 +65,6 @@ htmlcov/
 # Data files (keep template)
 .resume-data.json
 
+# Logs
+logs/
+*.log
