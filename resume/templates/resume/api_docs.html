@@ -1,0 +1,529 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Documentation - Job Submission API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/theme.js' %}"></script>
+    
+    <style>
+        h2::after { display: none; }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="margin-bottom: 40px;">
+            <a href="/" class="nav-link">← Back to Resume</a>
+        </div>
+        
+        <h1>🚀 Job Submission API</h1>
+        <p class="subtitle">A RESTful API for submitting job opportunities directly through this portfolio site</p>
+        
+        <div class="glass">
+            <h2>Overview</h2>
+            <p>This API allows recruiters, colleagues, and connections to submit job opportunities directly. It's designed to be simple, open, and easy to integrate into your workflows.</p>
+            
+            <div class="info-box">
+                <strong>Base URL:</strong> <code>{{ request.scheme }}://{{ request.get_host }}/api/</code>
+            </div>
+            
+            <div class="success-box">
+                <strong>Authentication:</strong> None required! This API is open for anyone to submit opportunities.
+            </div>
+        </div>
+
+        <div class="glass">
+            <h2>🎯 Interactive API Explorer</h2>
+            <p>Try out the API right here in your browser!</p>
+            
+            <div class="method-tabs">
+                <div class="method-tab active" onclick="switchTab('explorer')">Submit Job (POST)</div>
+                <div class="method-tab" onclick="switchTab('list')">List Jobs (GET)</div>
+            </div>
+            
+            <div id="explorer-tab" class="tab-content active">
+                <form id="job-form" hx-post="/api/jobs/" hx-target="#api-response" hx-swap="innerHTML">
+                <div class="mb-3">
+                        <label class="form-label">Job Title <span style="color: #f93e3e;">*</span></label>
+                        <input type="text" class="form-control" name="title" placeholder="e.g., Senior Software Engineer" required>
+                </div>
+                <div class="mb-3">
+                        <label class="form-label">Company <span style="color: #f93e3e;">*</span></label>
+                        <input type="text" class="form-control" name="company" placeholder="e.g., Tech Startup Inc." required>
+                </div>
+                <div class="mb-3">
+                        <label class="form-label">Job Posting URL <span style="color: #f93e3e;">*</span></label>
+                        <input type="url" class="form-control" name="url" placeholder="https://example.com/careers/position" required>
+                </div>
+                <div class="mb-3">
+                        <label class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" name="description" rows="3" placeholder="Any additional context about why this role might be a good fit..."></textarea>
+                </div>
+                <div class="mb-3">
+                        <label class="form-label">Your Email <span style="color: #f93e3e;">*</span></label>
+                        <input type="email" class="form-control" name="submitted_by" placeholder="your.email@example.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Job Opportunity</button>
+                    <button type="button" class="btn btn-secondary" onclick="fillExample()">Fill Example Data</button>
+                </form>
+                <div id="api-response" class="response-box">Response will appear here...</div>
+            </div>
+            
+            <div id="list-tab" class="tab-content">
+                <p>Fetch all submitted job opportunities:</p>
+                <button class="btn btn-primary" onclick="fetchJobs()">Get All Jobs</button>
+                <div style="margin-top: 15px;">
+                    <label class="form-label">Or get a specific job by ID:</label>
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <input type="number" id="job-id-input" class="form-control" placeholder="Job ID" min="1">
+                        </div>
+                        <button class="btn btn-primary" onclick="fetchJobById()">Get Job</button>
+                    </div>
+                </div>
+                <div id="list-response" class="response-box">Response will appear here...</div>
+            </div>
+        </div>
+
+        <div class="glass">
+            <h2>📚 API Endpoints</h2>
+            
+            <h3><span class="endpoint-badge badge-post">POST</span>/api/jobs/</h3>
+            <p>Submit a new job opportunity for review.</p>
+            
+            <h4>Request Body</h4>
+            <pre><code class="language-json">{
+  "title": "Senior Software Engineer",
+  "company": "Example Corp",
+  "url": "https://example.com/careers/senior-engineer",
+  "description": "Looking for a Django expert with 5+ years experience...",
+  "submitted_by": "recruiter@example.com"
+}</code></pre>
+
+            <h4>Parameters</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>title</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Job title or position name</td>
+                    </tr>
+                    <tr>
+                        <td><code>company</code></td>
+                        <td>string</td>
+                        <td>Yes</td>
+                        <td>Company or organization name</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td>string (URL)</td>
+                        <td>Yes</td>
+                        <td>Link to the job posting</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>No</td>
+                        <td>Additional notes or context</td>
+                    </tr>
+                    <tr>
+                        <td><code>submitted_by</code></td>
+                        <td>string (email)</td>
+                        <td>Yes</td>
+                        <td>Email address of submitter</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Success Response (201 Created)</h4>
+            <pre><code class="language-json">{
+  "message": "Job submission received successfully! Thank you for thinking of me.",
+  "data": {
+    "title": "Senior Software Engineer",
+    "company": "Example Corp",
+    "url": "https://example.com/careers/senior-engineer",
+    "description": "Looking for a Django expert...",
+    "submitted_by": "recruiter@example.com"
+  }
+}</code></pre>
+
+            <h4>Error Response (400 Bad Request)</h4>
+            <pre><code class="language-json">{
+  "title": ["This field is required."],
+  "url": ["Enter a valid URL."]
+}</code></pre>
+
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
+
+            <h3><span class="endpoint-badge badge-get">GET</span>/api/jobs/</h3>
+            <p>Retrieve all submitted job opportunities.</p>
+
+            <h4>Success Response (200 OK)</h4>
+            <pre><code class="language-json">[
+  {
+    "id": 1,
+    "title": "Senior Software Engineer",
+    "company": "Tech Startup",
+    "url": "https://example.com/jobs/123",
+    "description": "Looking for Django/React expertise",
+    "submitted_by": "recruiter@example.com",
+    "submitted_at": "2024-01-15T10:30:00Z",
+    "status": "pending"
+  },
+  {
+    "id": 2,
+    "title": "Full Stack Developer",
+    "company": "Another Company",
+    "url": "https://another.com/jobs/456",
+    "description": "Remote position",
+    "submitted_by": "friend@example.com",
+    "submitted_at": "2024-01-14T09:15:00Z",
+    "status": "pending"
+  }
+]</code></pre>
+
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0;">
+
+            <h3><span class="endpoint-badge badge-get">GET</span>/api/jobs/{id}/</h3>
+            <p>Retrieve a specific job submission by ID.</p>
+
+            <h4>Path Parameters</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>id</code></td>
+                        <td>integer</td>
+                        <td>The unique identifier of the job submission</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Success Response (200 OK)</h4>
+            <pre><code class="language-json">{
+  "id": 1,
+  "title": "Senior Software Engineer",
+  "company": "Tech Startup",
+  "url": "https://example.com/jobs/123",
+  "description": "Looking for Django/React expertise",
+  "submitted_by": "recruiter@example.com",
+  "submitted_at": "2024-01-15T10:30:00Z",
+  "status": "pending"
+}</code></pre>
+
+            <h4>Error Response (404 Not Found)</h4>
+            <pre><code class="language-json">{
+  "error": "Job submission not found"
+}</code></pre>
+        </div>
+
+        <!-- Data Models -->
+        <div class="glass">
+            <h2>📦 Data Models</h2>
+            
+            <h3>JobSubmission</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>id</code></td>
+                        <td>integer</td>
+                        <td>Unique identifier (auto-generated)</td>
+                    </tr>
+                    <tr>
+                        <td><code>title</code></td>
+                        <td>string</td>
+                        <td>Job title</td>
+                    </tr>
+                    <tr>
+                        <td><code>company</code></td>
+                        <td>string</td>
+                        <td>Company name</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td>string</td>
+                        <td>Job posting URL</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>Optional additional details</td>
+                    </tr>
+                    <tr>
+                        <td><code>submitted_by</code></td>
+                        <td>string</td>
+                        <td>Email of submitter</td>
+                    </tr>
+                    <tr>
+                        <td><code>submitted_at</code></td>
+                        <td>datetime</td>
+                        <td>Timestamp of submission (auto-generated)</td>
+                    </tr>
+                    <tr>
+                        <td><code>status</code></td>
+                        <td>string</td>
+                        <td>Current status (read-only)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Status Values</h4>
+            <div style="margin: 15px 0;">
+                <span class="status-tag">pending</span> - Submitted, awaiting review<br>
+                <span class="status-tag">applied</span> - Application submitted<br>
+                <span class="status-tag">interviewing</span> - In interview process<br>
+                <span class="status-tag">rejected</span> - Not selected<br>
+                <span class="status-tag">accepted</span> - Position accepted
+            </div>
+        </div>
+
+        <div class="glass">
+            <h2>💻 Code Examples</h2>
+            
+            <h3>cURL</h3>
+            <pre><code class="language-bash">curl -X POST {{ request.scheme }}://{{ request.get_host }}/api/jobs/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Senior Software Engineer",
+    "company": "Tech Startup",
+    "url": "https://example.com/jobs/123",
+    "description": "Looking for Django/React expertise",
+    "submitted_by": "recruiter@example.com"
+  }'</code></pre>
+
+            <h3>Python (httpx)</h3>
+            <pre><code class="language-python">import httpx
+
+url = "{{ request.scheme }}://{{ request.get_host }}/api/jobs/"
+data = {
+    "title": "Senior Software Engineer",
+    "company": "Tech Startup",
+    "url": "https://example.com/jobs/123",
+    "description": "Looking for Django/React expertise",
+    "submitted_by": "recruiter@example.com"
+}
+
+response = httpx.post(url, json=data)
+print(response.json())</code></pre>
+
+            <h3>JavaScript (fetch)</h3>
+            <pre><code class="language-javascript">fetch('{{ request.scheme }}://{{ request.get_host }}/api/jobs/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    title: 'Senior Software Engineer',
+    company: 'Tech Startup',
+    url: 'https://example.com/jobs/123',
+    description: 'Looking for Django/React expertise',
+    submitted_by: 'recruiter@example.com'
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</code></pre>
+
+            <h3>Node.js (axios)</h3>
+            <pre><code class="language-javascript">const axios = require('axios');
+
+async function submitJob() {
+  try {
+    const response = await axios.post('{{ request.scheme }}://{{ request.get_host }}/api/jobs/', {
+      title: 'Senior Software Engineer',
+      company: 'Tech Startup',
+      url: 'https://example.com/jobs/123',
+      description: 'Looking for Django/React expertise',
+      submitted_by: 'recruiter@example.com'
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error:', error.response.data);
+  }
+}
+
+submitJob();</code></pre>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="glass">
+            <h2>✨ Best Practices</h2>
+            <ul style="line-height: 2;">
+                <li><strong>Be Specific:</strong> Include detailed descriptions when possible to help understand the opportunity</li>
+                <li><strong>Valid URLs:</strong> Ensure job posting URLs are accessible and direct to the actual position</li>
+                <li><strong>Add Context:</strong> Use the description field to explain why the role might be a good fit</li>
+                <li><strong>Legitimate Only:</strong> Only submit real, open positions from trustworthy sources</li>
+                <li><strong>Respect the Service:</strong> While there's no rate limiting, please don't abuse the API</li>
+            </ul>
+        </div>
+
+        <div class="glass">
+            <h2>⚠️ Error Handling & Limitations</h2>
+            
+            <h3>HTTP Status Codes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Meaning</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>200</code></td>
+                        <td>OK</td>
+                        <td>Request successful (GET requests)</td>
+                    </tr>
+                    <tr>
+                        <td><code>201</code></td>
+                        <td>Created</td>
+                        <td>Job submission created successfully</td>
+                    </tr>
+                    <tr>
+                        <td><code>400</code></td>
+                        <td>Bad Request</td>
+                        <td>Invalid data or missing required fields</td>
+                    </tr>
+                    <tr>
+                        <td><code>404</code></td>
+                        <td>Not Found</td>
+                        <td>Requested resource doesn't exist</td>
+                    </tr>
+                    <tr>
+                        <td><code>500</code></td>
+                        <td>Server Error</td>
+                        <td>Something went wrong on the server</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Rate Limiting</h3>
+            <div class="warning-box">
+                Currently, there is <strong>no rate limiting</strong> implemented. However, excessive or abusive submissions may be blocked. Please be respectful of the service.
+            </div>
+
+            <h3>Error Response Format</h3>
+            <p>All error responses follow a consistent format. Validation errors return field-specific messages:</p>
+            <pre><code class="language-json">{
+  "field_name": ["Error message for this field"],
+  "another_field": ["Another error message"]
+}</code></pre>
+            
+            <p>General errors return:</p>
+            <pre><code class="language-json">{
+  "error": "Error message describing what went wrong"
+}</code></pre>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin: 60px 0 40px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: rgba(255,255,255,0.5);">
+                Built with Django REST Framework • <a href="/" style="color: inherit;">Back to Resume</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        hljs.highlightAll();
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+        
+        function fillExample() {
+            document.querySelector('input[name="title"]').value = 'Senior Django Developer';
+            document.querySelector('input[name="company"]').value = 'Awesome Tech Co.';
+            document.querySelector('input[name="url"]').value = 'https://awesome-tech.com/careers/senior-django';
+            document.querySelector('textarea[name="description"]').value = 'Remote-first company building SaaS products with Django and React. Looking for someone with 5+ years experience.';
+            document.querySelector('input[name="submitted_by"]').value = 'recruiter@awesome-tech.com';
+        }
+        
+        async function fetchJobs() {
+            const responseBox = document.getElementById('list-response');
+            responseBox.innerHTML = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/jobs/');
+                const data = await response.json();
+                responseBox.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseBox.innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        async function fetchJobById() {
+            const jobId = document.getElementById('job-id-input').value;
+            const responseBox = document.getElementById('list-response');
+            
+            if (!jobId) {
+                responseBox.innerHTML = 'Please enter a job ID';
+                return;
+            }
+            
+            responseBox.innerHTML = 'Loading...';
+            
+            try {
+                const response = await fetch(`/api/jobs/${jobId}/`);
+                const data = await response.json();
+                responseBox.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseBox.innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            const target = evt.detail.target;
+            if (target.id === 'api-response') {
+                try {
+                    const response = JSON.parse(evt.detail.xhr.responseText);
+                    target.innerHTML = JSON.stringify(response, null, 2);
+                    target.style.color = evt.detail.successful ? '#49cc90' : '#f93e3e';
+                } catch (e) {
+                    target.innerHTML = evt.detail.xhr.responseText;
+                    target.style.color = '#f93e3e';
+                }
+            }
+        });
+        
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.successful && evt.detail.target.id === 'api-response') {
+                setTimeout(() => {
+                    document.getElementById('job-form').reset();
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

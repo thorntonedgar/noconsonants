@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Built With - Edgar Thornton</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/theme.js' %}"></script>
+    
+    <style>
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .tech-category {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-category:hover {
+            background: var(--tab-active-bg);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .tech-category h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .tech-item {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            border-left: 2px solid var(--glass-border);
+            padding-left: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-left: 8px;
+        }
+        
+        .infrastructure-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .infrastructure-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    <div class="container-main">
+        <div style="margin-bottom: 40px;">
+            <a href="/" class="nav-link">← Back to Resume</a>
+            <a href="/api-docs/" class="nav-link">API Docs</a>
+        </div>
+        
+        <h1>Built With</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">
+            The technology stack and infrastructure used to build this personal resume website.
+        </p>
+        
+        <div class="glass">
+            <h2>Backend</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Framework</h3>
+                    <div class="tech-item">
+                        Django <span class="version-badge">5.0+</span>
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Python web framework with batteries included
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        Django REST Framework
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            REST API toolkit for Django
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Language</h3>
+                    <div class="tech-item">
+                        Python <span class="version-badge">3.12</span>
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Modern Python with full type hints
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Type Checking</h3>
+                    <div class="tech-item">
+                        MyPy <span class="version-badge">1.8+</span>
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Static type checker for Python
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        django-stubs
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Django type stubs
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        djangorestframework-stubs
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            DRF type stubs
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass">
+            <h2>Frontend</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Interactivity</h3>
+                    <div class="tech-item">
+                        HTMX <span class="version-badge">1.9.10</span>
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            High-power tools for HTML, no JavaScript required
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>UI Framework</h3>
+                    <div class="tech-item">
+                        Bootstrap <span class="version-badge">5.3.2</span>
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Responsive grid and components
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Typography</h3>
+                    <div class="tech-item">
+                        Playfair Display
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Elegant serif for headings
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        Merriweather
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Readable serif for body text
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass">
+            <h2>Infrastructure & Deployment</h2>
+            
+            <div class="infrastructure-card">
+                <h3>Hosting: Render.com</h3>
+                <p class="description">
+                    Serverless hosting platform for web services. Provides automatic HTTPS, 
+                    continuous deployment from Git, and managed infrastructure.
+                </p>
+            </div>
+            
+            <div class="infrastructure-card">
+                <h3>Database: AWS RDS (PostgreSQL)</h3>
+                <p class="description">
+                    Managed PostgreSQL database on AWS. Production-grade relational database 
+                    with automated backups, high availability, and security features.
+                </p>
+            </div>
+            
+        </div>
+        
+        <div class="glass">
+            <h2>Development Tools</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h3>Package Management</h3>
+                    <div class="tech-item">
+                        uv
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Fast Python package manager
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <h3>Version Control</h3>
+                    <div class="tech-item">
+                        Git
+                        <div class="description" style="margin-top: 8px; font-size: 0.9rem;">
+                            Distributed version control
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass">
+            <h2>Design Philosophy</h2>
+            <div style="color: var(--text-secondary); line-height: 1.8;">
+                <p style="margin-bottom: 20px;">
+                    This site embodies a "liquid glass" aesthetic with modern glassmorphism effects, 
+                    designed to showcase technical depth while maintaining an elegant, professional appearance.
+                </p>
+                <p style="margin-bottom: 20px;">
+                    <strong style="color: var(--accent);">Key Principles:</strong>
+                </p>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                        <span style="position: absolute; left: 0;">▸</span>
+                        <strong style="color: var(--accent);">Performance:</strong> Server-rendered HTML with HTMX for interactivity
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                        <span style="position: absolute; left: 0;">▸</span>
+                        <strong style="color: var(--accent);">Type Safety:</strong> Full MyPy type checking throughout
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                        <span style="position: absolute; left: 0;">▸</span>
+                        <strong style="color: var(--accent);">Simplicity:</strong> Minimal JavaScript, modern CSS effects
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+                        <span style="position: absolute; left: 0;">▸</span>
+                        <strong style="color: var(--accent);">Scalability:</strong> Django + PostgreSQL for production workloads
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="glass">
+            <h2>Source Code</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                This website is built with modern open-source technologies. The codebase demonstrates 
+                best practices in Django development, API design, and modern web architecture.
+            </p>
+            <a href="https://github.com/thorntonedgar/portfolio-site" target="_blank" class="nav-link" style="display: inline-flex; align-items: center; gap: 8px; background: var(--glass-bg); padding: 12px 24px; border-radius: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"/>
+                </svg>
+                View on GitHub
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+
