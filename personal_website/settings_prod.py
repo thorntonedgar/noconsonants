@@ -45,9 +45,10 @@ if DATABASE_URL:
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)  # noqa: F405
 
-# Static Files - S3 or similar in production
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+# Static Files - production
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # noqa: F405
+STATICFILES_DIRS = [BASE_DIR / 'static']  # noqa: F405
 
 # Media Files
 MEDIA_URL = '/media/'
