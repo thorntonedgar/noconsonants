@@ -3,8 +3,11 @@
 
 set -e
 
-echo "Installing dependencies with uv..."
+echo "Installing dependencies..."
 pip install -r requirements.txt 
+
+echo "Making migrations..."
+python manage.py makemigrations
 
 
 echo "Running migrations..."
