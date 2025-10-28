@@ -3,8 +3,11 @@
 
 set -e
 
+echo "Installing uv..."
+pip install uv
+
 echo "Installing dependencies with uv..."
-uv pip install -r requirements.txt --python "$(which python)"
+uv pip install -r requirements.txt
 
 echo "Running migrations..."
 python manage.py migrate --no-input
