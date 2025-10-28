@@ -39,6 +39,12 @@ if ENVIRONMENT == 'production':
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
 
+# Add WhiteNoise middleware for static file serving (after SecurityMiddleware)
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # noqa: F405
+
+# WhiteNoise configuration - compresses and serves static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 # Database - PostgreSQL in production
 DATABASE_URL = config('DATABASE_URL', default='')
 if DATABASE_URL:
