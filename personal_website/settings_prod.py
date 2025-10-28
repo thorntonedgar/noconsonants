@@ -22,7 +22,7 @@ ENVIRONMENT = config('ENVIRONMENT', default='production')
 # Allowed Hosts from environment
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1',
+    default='noconsonants.onrender.com,noconsonants.com,www.noconsonants.com,localhost,127.0.0.1',
     cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
 )
 
