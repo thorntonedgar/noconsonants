@@ -14,7 +14,7 @@ import os
 SECRET_KEY = config('SECRET_KEY')
 
 # Debug must be False in production
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default='False', cast=bool)
 
 # Environment
 ENVIRONMENT = config('ENVIRONMENT', default='production')
